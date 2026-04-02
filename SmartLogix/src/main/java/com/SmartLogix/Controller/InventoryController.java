@@ -17,29 +17,23 @@ public class InventoryController {
 
     @GetMapping("/{productoCodigo}/{almacenCodigo}")
     public ResponseEntity<Inventory> getStock(@PathVariable String productoCodigo, @PathVariable String almacenCodigo) {
-        // Buscamos en la base de datos
-        Optional<Inventory> inventarioEncontrado = repository.findByProductCodeAndCodigoAlmacen(productoCodigo, almacenCodigo);
 
-        // Forma clásica y segura de retornar la respuesta
+        Optional<Inventory> inventarioEncontrado = repository.findByProductCodeAndCodigoAlmacen(productoCodigo, almacenCodigo);
         if (inventarioEncontrado.isPresent()) {
-            return ResponseEntity.ok(inventarioEncontrado.get()); // Si existe, devolvemos 200 OK con el objeto
+            return ResponseEntity.ok(inventarioEncontrado.get());
         } else {
-            return ResponseEntity.notFound().build(); // Si no existe, devolvemos 404 Not Found
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping("/update")
     public ResponseEntity<Inventory> updateStock(@RequestBody Inventory request) {
-        // Buscamos si ya existe el inventario. Si no existe, creamos uno NUEVO con "new Inventory()"
         Inventory inventory = repository.findByProductCodeAndCodigoAlmacen(request.getProductoCodigo(), request.getAlmacenCodigo())
-                .orElse(new Inventory()); // Usamos el @NoArgsConstructor en lugar del builder()
-
-        // Actualizamos los datos manualmente usando los setters de Lombok
+                .orElse(new Inventory());
         inventory.setProductoCodigo(request.getProductoCodigo());
         inventory.setAlmacenCodigo(request.getAlmacenCodigo());
         inventory.setStock(request.getStock());
 
-        // Guardamos y retornamos
         return ResponseEntity.ok(repository.save(inventory));
     }
 }
