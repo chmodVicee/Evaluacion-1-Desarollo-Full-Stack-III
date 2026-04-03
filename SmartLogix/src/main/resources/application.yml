@@ -1,1 +1,35 @@
-spring.application.name=SmartLogix
+server:
+  port: 8080
+
+spring:
+  application:
+    name: smartlogix-api
+
+  datasource:
+    url: jdbc:h2:mem:smartlogixdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderServiceBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
