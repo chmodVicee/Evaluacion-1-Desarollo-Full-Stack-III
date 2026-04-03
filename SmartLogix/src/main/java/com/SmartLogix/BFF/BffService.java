@@ -17,9 +17,9 @@ public class BffService {
 
     @CircuitBreaker(name = "orderServiceBreaker", fallbackMethod = "orderFallBack")
     public String createOrderFromFrontend(String tipo, String codigoProducto, Integer cantidad){
-        String url = String.format("%s?tyipo=%&codigoProducto=%s&cantidad=%d",
+        String url = String.format("%s?tipo=%s&productoCodigo=%s&cantidad=%d",
                 ORDER_SERVICE_URL, tipo, codigoProducto, cantidad);
-        return restTemplate.postForObject(url,null, String.class);
+        return restTemplate.postForObject(url, null, String.class);
     }
 
     public String orderFallBack (String tipo, String productoCodigo, Integer cantidad, Throwable throwable) {
