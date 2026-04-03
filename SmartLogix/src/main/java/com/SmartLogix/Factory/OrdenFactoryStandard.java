@@ -1,7 +1,9 @@
 package com.SmartLogix.Factory;
 
 import com.SmartLogix.Model.Orden;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrdenFactoryStandard implements OrdenFactory{
 
     @Override
