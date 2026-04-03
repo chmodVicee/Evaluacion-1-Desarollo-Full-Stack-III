@@ -18,7 +18,7 @@ public class InventoryController {
     @GetMapping("/{productoCodigo}/{almacenCodigo}")
     public ResponseEntity<Inventory> getStock(@PathVariable String productoCodigo, @PathVariable String almacenCodigo) {
 
-        Optional<Inventory> inventarioEncontrado = repository.findByProductCodeAndCodigoAlmacen(productoCodigo, almacenCodigo);
+        Optional<Inventory> inventarioEncontrado = repository.findByProductoCodigoAndAlmacenCodigo(productoCodigo, almacenCodigo);
         if (inventarioEncontrado.isPresent()) {
             return ResponseEntity.ok(inventarioEncontrado.get());
         } else {
@@ -28,7 +28,7 @@ public class InventoryController {
 
     @PostMapping("/update")
     public ResponseEntity<Inventory> updateStock(@RequestBody Inventory request) {
-        Inventory inventory = repository.findByProductCodeAndCodigoAlmacen(request.getProductoCodigo(), request.getAlmacenCodigo())
+        Inventory inventory = repository.findByProductoCodigoAndAlmacenCodigo(request.getProductoCodigo(), request.getAlmacenCodigo())
                 .orElse(new Inventory());
         inventory.setProductoCodigo(request.getProductoCodigo());
         inventory.setAlmacenCodigo(request.getAlmacenCodigo());
