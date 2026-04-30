@@ -3,9 +3,11 @@ package com.SmartLogix.Controller;
 import com.SmartLogix.Model.Inventory; // Asegúrate de que esta ruta coincida con tu paquete real
 import com.SmartLogix.Repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +26,25 @@ public class InventoryController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Inventory>> getAllStock(){
+        List<Inventory> allInventory = repository.findAll();
+
+        return ResponseEntity.ok(allInventory);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Inventory> addProduct(@RequestBody Inventory inventory) {
+        Inventory nuevo = repository.save(inventory);
+        return ResponseEntity.status(201).body(nuevo);
+    }
+
+    @PostMapping("/bulk-add")
+    public ResponseEntity<List<Inventory>> addProducts(@RequestBody List<Inventory> products){
+        List<Inventory> guardados = repository.saveAll(products);
+        return ResponseEntity.status(201).body(guardados);
     }
 
     @PostMapping("/update")
