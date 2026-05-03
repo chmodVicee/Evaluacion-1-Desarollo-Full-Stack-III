@@ -14,3 +14,21 @@ Diseña una arquitectura de **Microservicios escalable**, con **patrones de dise
 - Diseñar una **API Gateway** que pueda gestionar la comunicación entre los microservicios y el frontend.
 - Implementar patrones como **Repository Pattern** para la persistencia de datos, **Factory Method** para la creación de instancias y **Circuit Braker** para manejar fallos en la comunicación entre servicios.
 - Asegurar que los microservicios sean **escalables y desacoplados**, permitiendo futuras mejoras sin afectar el funcionamiento del sistema.
+
+## Comprobar el funcionamiento del backend + base de datos
+Ejecutar la aplicación desde el IDE o desde la consola con: `./mvnw spring-boot:run`.
+Una vez el backend esté ejecutandose, procedemos a ingresar a Postman para hacerle peticion POST a este y comprobar su funcionamiento:
+- `POST: http://localhost:8080/api/inventory/add`
+
+Con la siguiente estructura en formato JSON:
+```
+{
+    "productoCodigo":"",
+    "almacenCodigo":"",
+    "stock":{number}
+}
+```
+Una vez nos haya entregado un _201 Created_ haremos la comprobación de este con la petición:
+- `GET: http://localhost:8080/api/inventory/all`
+
+Este GET nos devolverá todas las ordenes que haya en el inventario.
