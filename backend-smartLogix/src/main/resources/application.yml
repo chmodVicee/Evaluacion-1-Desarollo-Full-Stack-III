@@ -6,7 +6,7 @@ spring:
     name: smartlogix-api
 
   datasource:
-    url: jdbc:h2:mem:smartlogixdb
+    url: jdbc:h2:file:~/smartlogixdb;AUTO_SERVER=TRUE
     driverClassName: org.h2.Driver
     username: sa
     password:
