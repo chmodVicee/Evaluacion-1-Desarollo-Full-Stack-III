@@ -47,6 +47,7 @@ class InventoryControllerTest {
         ResponseEntity<List<Inventory>> response = inventoryController.getAllStock();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
         assertEquals(2, response.getBody().size());
     }
 
@@ -59,6 +60,50 @@ class InventoryControllerTest {
         ResponseEntity<Inventory> response = inventoryController.addProduct(newInventory);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
         assertEquals(3L, response.getBody().getId());
+        assertEquals("PROD-3", response.getBody().getProductoCodigo());
+    }
+
+    @Test
+    void testAddProducts_BulkAdd() {
+        // Arrange
+        Inventory inv1 = new Inventory(null, "PROD-4", 10, "ALM-4");
+        Inventory inv2 = new Inventory(null, "PROD-5", 20, "ALM-5");
+        List<Inventory> newProducts = Arrays.asList(inv1, inv2);
+
+        Inventory savedInv1 = new Inventory(4L, "PROD-4", 10, "ALM-4");
+        Inventory savedInv2 = new Inventory(5L, "PROD-5", 20, "ALM-5");
+        List<Inventory> savedProducts = Arrays.asList(savedInv1, savedInv2);
+
+        Mockito.when(inventoryService.addProducts(Mockito.anyList())).thenReturn(savedProducts);
+
+        // Act
+        ResponseEntity<List<Inventory>> response = inventoryController.addProducts(newProducts);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size());
+        assertEquals(4L, response.getBody().get(0).getId());
+        assertEquals(5L, response.getBody().get(1).getId());
+    }
+
+    @Test
+    void testUpdateStock() {
+        // Arrange
+        Inventory requestInventory = new Inventory(null, "PROD-6", 100, "ALM-6");
+        Inventory updatedInventory = new Inventory(6L, "PROD-6", 100, "ALM-6");
+
+        Mockito.when(inventoryService.updateStock(Mockito.any(Inventory.class))).thenReturn(updatedInventory);
+
+        // Act
+        ResponseEntity<Inventory> response = inventoryController.updateStock(requestInventory);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(6L, response.getBody().getId());
+        assertEquals(100, response.getBody().getStock());
     }
 }
